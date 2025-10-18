@@ -1,0 +1,17 @@
+error: `EnumIsVariant` can only be derived for enums
+ --> tests/expected_failures/derive_on_struct.rs:4:1
+  |
+4 | / struct Person {
+5 | |     name: String,
+6 | |     age: i32,
+7 | | }
+  | |_^
+
+error: `EnumAsVariant` can only be derived for enums
+ --> tests/expected_failures/derive_on_struct.rs:4:1
+  |
+4 | / struct Person {
+5 | |     name: String,
+6 | |     age: i32,
+7 | | }
+  | |_^
