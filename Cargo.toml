@@ -3,7 +3,7 @@ name = "enum_variant_accessors"
 version = "1.0.0"
 edition = "2021"
 license = "MIT"
-description = "Derive macros to generate is_* and as_* accessors for enum variants"
+description = "derive macros to generate is_*, as_* and as_*_mut accessors for enum variants"
 keywords = ["enum", "derive", "macros", "utility", "accessors"]
 categories = ["development-tools", "rust-patterns"]
 
@@ -15,3 +15,6 @@ heck = "0.5.0"
 proc-macro2 = "1.0.101"
 quote = "1.0.41"
 syn = { version = "2.0.107", features = ["extra-traits", "full", "parsing"] }
+
+[dev-dependencies]
+trybuild = "1.0.112"

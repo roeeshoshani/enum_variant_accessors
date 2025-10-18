@@ -1,30 +1,55 @@
 # enum_variant_accessors
 
-Two tiny derive macros for enums:
+Derive macros that generate ergonomic variant accessors for enums.
 
-- `#[derive(EnumIsVariant)]` → `is_<variant>(&self) -> bool`
-- `#[derive(EnumAsVariant)]` → `as_<variant>(&self) -> Option<VariantData>`
+- `#[derive(EnumIsVariant)]` — adds `is_<variant>() -> bool` methods.
+- `#[derive(EnumAsVariant)]` — adds borrowed accessors:
+  - `as_<variant>(&self) -> Option<<borrowed variant data>>`
+  - `as_<variant>_mut(&mut self) -> Option<<borrowed variant data (mutable)>>`
 
-## What `as_*` returns
+## Supported variants
 
-Because methods take `&self`, the data is **borrowed**:
+- **Unit** variants (`Variant` or `Variant()`):
+  - Borrowed data type: `()`
+  - Accessors return `Option<()>`
+- **Single-field tuple** variants (`Variant(T)`):
+  - Borrowed data type: `&T` / `&mut T`
+  - Accessors return `Option<&T>` / `Option<&mut T>`
+- **Multi-field tuple** variants (`Variant(T1, T2, ...)`):
+  - Borrowed data type: `(&T1, &T2, ...)` / `(&mut T1, &mut T2, ...)`
+  - Accessors return `Option<(&T1, &T2, ...)>` / `Option<(&mut T1, &mut T2, ...)>`
 
-- **Unit variant**: `Option<()>`
-- **Single unnamed field**: `Option<&T>`
-- **Multiple unnamed fields**: `Option<( &T1, &T2, ... )>`
-- **Named fields**: `Option<EnumNameVariantName<'_ , ...>>` where a helper struct is generated (borrowing each field).  
-  Example:
-  ```rust
-  #[derive(EnumAsVariant)]
-  enum MyEnum {
-      Person { name: String, age: u32 }
-  }
-  // Generated:
-  pub struct MyEnumPerson<'a> {
-      pub name: &'a String,
-      pub age: &'a u32
-  }
-  impl MyEnum {
-      fn as_person(&self) -> Option<MyEnumPerson<'_>> { ... }
-  }
+> **Not supported:** named-field (struct-like) variants.
 
+## Examples
+
+```rust
+use enum_variant_accessors::{EnumIsVariant, EnumAsVariant};
+
+#[derive(EnumIsVariant, EnumAsVariant)]
+enum Msg<'a> {
+    Ping,
+    Pong(),
+    One(u32),
+    Pair(&'a str, usize),
+}
+
+fn main() {
+    let mut m = Msg::Pair("hi", 7);
+
+    assert!(m.is_pair());
+    assert!(!m.is_ping());
+    assert!(matches!(m.as_ping(), None));
+    assert_eq!(m.as_pair(), Some((&"hi", &7)));
+
+    if let Some((s, n)) = m.as_pair_mut() {
+        *n += 1;
+        assert_eq!(*s, "hi");
+    }
+    assert_eq!(m.as_pair(), Some((&"hi", &8)));
+
+    assert_eq!(m.as_pong(), None);
+    let p = Msg::Pong();
+    assert_eq!(p.as_pong(), Some(()));
+}
+```
