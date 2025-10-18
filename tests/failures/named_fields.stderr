@@ -1,12 +1,11 @@
 error: Named-field variants are not supported by `EnumIsVariant`
- --> $DIR/named_fields.rs:6:5
+ --> tests/failures/named_fields.rs:6:5
   |
 6 |     Named { x: i32, y: i32 },
-  |     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^
 
 error: Named-field variants are not supported by `EnumAsVariant`
- --> $DIR/named_fields.rs:6:5
+ --> tests/failures/named_fields.rs:6:5
   |
 6 |     Named { x: i32, y: i32 },
-  |     ^^^^^^^^^^^^^^^^^^^^^^^^^
-
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^
