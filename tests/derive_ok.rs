@@ -9,6 +9,7 @@ where
     A2(),
     B(T),
     C(&'a str, usize),
+    D { x: u32, y: String },
 }
 
 #[test]
@@ -17,6 +18,7 @@ fn test_is_methods() {
     assert!(x.is_a());
     assert!(!x.is_b());
     assert!(!x.is_c());
+    assert!(!x.is_d());
 
     let y = E::<i32>::A2();
     assert!(y.is_a2());

@@ -1,0 +1,14 @@
+error[E0599]: no method named `as_named` found for enum `MyEnum` in the current scope
+  --> tests/expected_failures/as_variant_with_named_fields.rs:15:15
+   |
+ 4 | enum MyEnum {
+   | ----------- method `as_named` not found for this enum
+...
+15 |     let _ = x.as_named();
+   |               ^^^^^^^^
+   |
+help: there is a method `as_a` with a similar name
+   |
+15 -     let _ = x.as_named();
+15 +     let _ = x.as_a();
+   |

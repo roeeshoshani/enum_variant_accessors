@@ -37,14 +37,6 @@ fn impl_is_variant(input: &DeriveInput) -> syn::Result<TokenStream> {
 
     let mut methods = Vec::new();
     for variant in &data_enum.variants {
-        // Reject named struct-like variants
-        if matches!(variant.fields, Fields::Named(_)) {
-            return Err(syn::Error::new(
-                variant.span(),
-                "Named-field variants are not supported by `EnumIsVariant`",
-            ));
-        }
-
         let v_ident = &variant.ident;
         let snake = v_ident.to_string().to_snake_case();
         let fn_ident = format_ident!("is_{}", snake);
@@ -58,7 +50,9 @@ fn impl_is_variant(input: &DeriveInput) -> syn::Result<TokenStream> {
                     .collect::<Vec<_>>();
                 quote! { #name::#v_ident( #(#wilds),* ) }
             }
-            Fields::Named(_) => unreachable!(),
+            Fields::Named(_) => quote! {
+                #name::#v_ident { .. }
+            },
         };
 
         methods.push(quote! {
@@ -90,12 +84,9 @@ fn impl_as_variant(input: &DeriveInput) -> syn::Result<TokenStream> {
 
     let mut methods = Vec::new();
     for variant in &data_enum.variants {
-        // Reject named struct-like variants
+        // skip named struct-like variants
         if matches!(variant.fields, Fields::Named(_)) {
-            return Err(syn::Error::new(
-                variant.span(),
-                "Named-field variants are not supported by `EnumAsVariant`",
-            ));
+            continue;
         }
 
         let v_ident = &variant.ident;

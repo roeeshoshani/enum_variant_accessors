@@ -19,7 +19,7 @@ Derive macros that generate ergonomic variant accessors for enums.
   - Borrowed data type: `(&T1, &T2, ...)` / `(&mut T1, &mut T2, ...)`
   - Accessors return `Option<(&T1, &T2, ...)>` / `Option<(&mut T1, &mut T2, ...)>`
 
-> **Not supported:** named-field (struct-like) variants.
+> **Not supported:** generating `as_*` functions for named-field (struct-like) variants. such variants will be skipped when generating `as_*` functions.
 
 ## Examples
 
