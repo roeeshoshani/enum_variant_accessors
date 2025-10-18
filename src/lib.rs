@@ -107,19 +107,19 @@ fn impl_as_variant(input: &DeriveInput) -> syn::Result<TokenStream> {
         // Build patterns and return types for &self and &mut self accessors
         match &variant.fields {
             Fields::Unit => {
-                // Variant / Variant() -> ()
+                // Variant -> ()
                 methods.push(quote! {
                     #[inline]
                     pub fn #as_fn_ident(&self) -> ::core::option::Option<()> {
                         match self {
-                            Self::#v_ident | Self::#v_ident() => ::core::option::Option::Some(()),
+                            Self::#v_ident => ::core::option::Option::Some(()),
                             _ => ::core::option::Option::None,
                         }
                     }
                     #[inline]
                     pub fn #as_mut_fn_ident(&mut self) -> ::core::option::Option<()> {
                         match self {
-                            Self::#v_ident | Self::#v_ident() => ::core::option::Option::Some(()),
+                            Self::#v_ident => ::core::option::Option::Some(()),
                             _ => ::core::option::Option::None,
                         }
                     }
