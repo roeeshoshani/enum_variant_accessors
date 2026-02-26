@@ -57,7 +57,7 @@ fn impl_is_variant(input: &DeriveInput) -> syn::Result<TokenStream> {
 
         methods.push(quote! {
             #[inline]
-            pub fn #fn_ident(&self) -> bool {
+            pub const fn #fn_ident(&self) -> bool {
                 matches!(self, #pat)
             }
         });
@@ -101,14 +101,14 @@ fn impl_as_variant(input: &DeriveInput) -> syn::Result<TokenStream> {
                 // Variant -> ()
                 methods.push(quote! {
                     #[inline]
-                    pub fn #as_fn_ident(&self) -> ::core::option::Option<()> {
+                    pub const fn #as_fn_ident(&self) -> ::core::option::Option<()> {
                         match self {
                             Self::#v_ident => ::core::option::Option::Some(()),
                             _ => ::core::option::Option::None,
                         }
                     }
                     #[inline]
-                    pub fn #as_mut_fn_ident(&mut self) -> ::core::option::Option<()> {
+                    pub const fn #as_mut_fn_ident(&mut self) -> ::core::option::Option<()> {
                         match self {
                             Self::#v_ident => ::core::option::Option::Some(()),
                             _ => ::core::option::Option::None,
@@ -120,14 +120,14 @@ fn impl_as_variant(input: &DeriveInput) -> syn::Result<TokenStream> {
                 // Variant() (explicit empty tuple) -> ()
                 methods.push(quote! {
                     #[inline]
-                    pub fn #as_fn_ident(&self) -> ::core::option::Option<()> {
+                    pub const fn #as_fn_ident(&self) -> ::core::option::Option<()> {
                         match self {
                             Self::#v_ident() => ::core::option::Option::Some(()),
                             _ => ::core::option::Option::None,
                         }
                     }
                     #[inline]
-                    pub fn #as_mut_fn_ident(&mut self) -> ::core::option::Option<()> {
+                    pub const fn #as_mut_fn_ident(&mut self) -> ::core::option::Option<()> {
                         match self {
                             Self::#v_ident() => ::core::option::Option::Some(()),
                             _ => ::core::option::Option::None,
@@ -140,14 +140,14 @@ fn impl_as_variant(input: &DeriveInput) -> syn::Result<TokenStream> {
                 let ty = &fields.unnamed[0].ty;
                 methods.push(quote! {
                     #[inline]
-                    pub fn #as_fn_ident(&self) -> ::core::option::Option<&#ty> {
+                    pub const fn #as_fn_ident(&self) -> ::core::option::Option<&#ty> {
                         match self {
                             Self::#v_ident(ref v) => ::core::option::Option::Some(v),
                             _ => ::core::option::Option::None,
                         }
                     }
                     #[inline]
-                    pub fn #as_mut_fn_ident(&mut self) -> ::core::option::Option<&mut #ty> {
+                    pub const fn #as_mut_fn_ident(&mut self) -> ::core::option::Option<&mut #ty> {
                         match self {
                             Self::#v_ident(ref mut v) => ::core::option::Option::Some(v),
                             _ => ::core::option::Option::None,
@@ -171,14 +171,14 @@ fn impl_as_variant(input: &DeriveInput) -> syn::Result<TokenStream> {
 
                 methods.push(quote! {
                     #[inline]
-                    pub fn #as_fn_ident(&self) -> ::core::option::Option<#tuple_ref> {
+                    pub const fn #as_fn_ident(&self) -> ::core::option::Option<#tuple_ref> {
                         match self {
                             Self::#v_ident( #( #ref_pats ),* ) => ::core::option::Option::Some(#tuple_vals),
                             _ => ::core::option::Option::None,
                         }
                     }
                     #[inline]
-                    pub fn #as_mut_fn_ident(&mut self) -> ::core::option::Option<#tuple_ref_mut> {
+                    pub const fn #as_mut_fn_ident(&mut self) -> ::core::option::Option<#tuple_ref_mut> {
                         match self {
                             Self::#v_ident( #( #ref_mut_pats ),* ) => ::core::option::Option::Some(#tuple_vals),
                             _ => ::core::option::Option::None,
