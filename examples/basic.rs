@@ -3,6 +3,7 @@ use enum_variant_accessors::{EnumAsVariant, EnumIsVariant};
 #[derive(EnumIsVariant, EnumAsVariant, Debug)]
 enum Node<'a> {
     Unit,
+    #[allow(dead_code)]
     Empty(),
     One(i32),
     Two(&'a str, usize),

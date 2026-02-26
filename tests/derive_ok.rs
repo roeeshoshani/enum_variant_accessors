@@ -9,7 +9,11 @@ where
     A2(),
     B(T),
     C(&'a str, usize),
-    D { x: u32, y: String },
+    #[allow(dead_code)]
+    D {
+        x: u32,
+        y: String,
+    },
 }
 
 #[test]
@@ -58,6 +62,7 @@ fn test_generics_bounds() {
     #[derive(EnumIsVariant, EnumAsVariant)]
     enum G<'a, U: 'a> {
         X(&'a U),
+        #[allow(dead_code)]
         Y,
     }
     let v = 3u8;
