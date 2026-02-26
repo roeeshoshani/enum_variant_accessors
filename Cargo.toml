@@ -1,9 +1,8 @@
 [package]
 name = "enum_variant_accessors"
-version = "1.0.1"
+version = "1.0.2"
 edition = "2021"
 license = "MIT"
-authors = ["Roee Shoshani"]
 repository = "https://github.com/roeeshoshani/enum_variant_accessors"
 description = "derive macros to generate is_*, as_* and as_*_mut accessors for enum variants"
 keywords = ["enum", "derive", "macros", "utility", "accessors"]
